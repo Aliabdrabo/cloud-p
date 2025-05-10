@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Request Delivery</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .navbar {
+      background-color: #333;
+      color: white;
+      padding: 15px 0;
+    }
+    
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .nav-logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      text-decoration: none;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+    
+    .nav-links a:hover, .nav-links a.active {
+      background-color: #555;
+    }
+    
+    .container {
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 30px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+    }
+    
+    input, select, textarea, button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+    
+    button {
+      background-color: #333;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    button:hover {
+      background-color: #555;
+    }
+    
+    .error-message {
+      color: red;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    
+    .success-message {
+      color: green;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/home" class="nav-logo">Delivery App</a>
+      <div class="nav-links">
+        <a href="/home">Home</a>
+        <a href="/register-page">Register</a>
+        <a href="/login-page">Login</a>
+        <a href="/request-delivery" class="active">Request Delivery</a>
+        <a href="/assigned-deliveries">Assigned Deliveries</a>
+        <a href="/update-delivery-status">Update Status</a>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="container">
+    <h2>Request Delivery</h2>
+    <div id="errorMsg" class="error-message"></div>
+    <div id="successMsg" class="success-message"></div>
+    <form id="deliveryForm">
+      <label for="size">Package Size:</label>
+      <select id="size" name="size" required>
+        <option value="small">Small</option>
+        <option value="medium">Medium</option>
+        <option value="large">Large</option>
+      </select>
+      
+      <label for="weight">Weight (kg):</label>
+      <input type="number" id="weight" name="weight" step="0.1" min="0.1" required />
+      
+      <label for="address">Delivery Address:</label>
+      <textarea id="address" name="address" rows="4" required></textarea>
+      
+      <button type="submit">Request Delivery</button>
+    </form>
+  </div>
+
+  <script>
+    // Check if user is logged in
+    window.addEventListener('DOMContentLoaded', function() {
+      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+      
+      if (!userData.user_id) {
+        alert('Please login to request a delivery');
+        window.location.href = '/login-page';
+      } else if (userData.role !== 'customer') {
+        alert('Only customers can request deliveries');
+        window.location.href = '/home';
+      }
+    });
+
+    document.getElementById('deliveryForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      
+      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+      const user_id = userData.user_id;
+      const size = document.getElementById('size').value;
+      const weight = document.getElementById('weight').value;
+      const address = document.getElementById('address').value;
+      
+      const errorMsg = document.getElementById('errorMsg');
+      const successMsg = document.getElementById('successMsg');
+      
+      // Clear previous messages
+      errorMsg.textContent = '';
+      successMsg.textContent = '';
+      
+      try {
+        const response = await fetch('/delivery', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id, size, weight, address })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          successMsg.textContent = `Delivery request submitted successfully! Your delivery ID is: ${data.delivery_id}`;
+          document.getElementById('deliveryForm').reset();
+        } else {
+          errorMsg.textContent = data.error || "Failed to submit delivery request";
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        errorMsg.textContent = "Something went wrong. Please try again.";
+      }
+    });
+  </script>
+</body>
+</html>

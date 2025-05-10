@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Update Delivery Status</title>
+ <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+          <a href="home.html" class="nav-logo">Delivery App</a>
+          <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="register.html">Register</a>
+            <a href="login.html">Login</a>
+            
+          </div>
+            <nav class="navbar">
+    <div class="nav-container">
+      <a href="{{ url_for('home') }}" class="nav-logo">Delivery App</a>
+      <div class="nav-links">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('register_page') }}">Register</a>
+        <a href="{{ url_for('login_page') }}">Login</a>
+        <a href="{{ url_for('assigned_deliveries_page') }}" class="active">My Deliveries</a>
+      </div>
+    </div>
+        </div>
+      </nav>
+  <div class="container">
+    <h2>Update Delivery Status</h2>
+    <form id="statusForm">
+      <input type="text" id="delivery_id" placeholder="Delivery ID" required />
+      <input type="text" id="new_status_str" placeholder="New Status (e.g., DELIVERED)" required />
+      <button type="submit">Update</button>
+    </form>
+  </div>
+
+  <script>
+    window.onload = () => {
+      const userData = JSON.parse(localStorage.getItem('userData'));
+      if (!userData || !userData.user_id) {
+        alert("Please login first");
+        window.location.href = "login.html";
+        return;
+      }
+
+      // ✅ استقبل delivery_id من URL لو موجود
+      const urlParams = new URLSearchParams(window.location.search);
+      const delivery_id_from_url = urlParams.get('delivery_id');
+      if (delivery_id_from_url) {
+        document.getElementById('delivery_id').value = delivery_id_from_url;
+      }
+
+      document.getElementById('statusForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const delivery_id = document.getElementById('delivery_id').value;
+        const status = document.getElementById('new_status_str').value;
+
+        const response = await fetch('http://localhost:5000/delivery-status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ delivery_id, status })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          alert("Error: " + data.message);
+          return;
+        }
+
+        alert("Status updated successfully");
+      });
+    }
+  </script>
+</body>
+</html>

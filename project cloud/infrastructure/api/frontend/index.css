@@ -1,0 +1,139 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* أو حسب ارتفاع الـ navbar */
+    box-sizing: border-box;
+  }
+
+  .container {
+    text-align: center;
+  }
+
+  .container5 {
+    text-align: center;
+    padding-top: 50px;
+  }
+  h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  form {
+    background-color: #fff;
+    padding: 25px 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  input, select {
+    padding: 10px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  button {
+    padding: 10px;
+    font-size: 15px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #555;
+  }
+  #deliveriesContainer {
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 20px;
+    padding: 20px;
+    justify-items: center;
+  }
+  
+  .delivery-item {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 250px;
+    text-align: left;
+  }
+  
+  
+  .delivery-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  }
+  
+  .delivery-item p {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .delivery-item strong {
+    color: #222;
+  }
+  .navbar {
+    background-color: #333;
+    padding: 15px 20px;
+    color: #fff;
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+  
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  
+  .nav-logo {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .nav-links a {
+    margin-left: 20px;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+  }
+  
+  .nav-links a:hover {
+    text-decoration: underline;
+  }
+  .nav-links a.active {
+    border-bottom: 2px solid #fff;
+    padding-bottom: 4px;
+  }
+  .nav-links a {
+    text-decoration: none;
+  }
+  .nav-links a:hover {
+    text-decoration: none; /* يمنع الخط تحت الرابط عند الوقوف عليه */
+  }
